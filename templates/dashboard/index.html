@@ -1,0 +1,110 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block body %}
+
+<main class="max-w-6xl mx-auto p-6 w-full text-white"><br><br>
+    <h2 class="text-4xl font-bold mb-1 title-orbitron text-center"
+        style="text-shadow: 0 0 10px #ff5500, 0 0 20px #ff2200, 0 0 30px #ff2200;">
+        Welcome back, {{ student.first_name }}!
+    </h2>
+    <br><br>
+    <!-- <p class="text-center text-gray-300 text-sm mb-6">
+        Phone Number: {{ student.phone_number }}
+    </p> -->
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-[#1c1c1c] shadow-lg rounded-xl p-5 text-center border border-red-600">
+            <h3 class="text-lg font-semibold text-red-400">Total Dares</h3>
+            <p class="text-3xl font-bold text-white mt-2">{{ total_dares }}</p>
+        </div>
+        <div class="bg-[#1c1c1c] shadow-lg rounded-xl p-5 text-center border border-green-600">
+            <h3 class="text-lg font-semibold text-green-400">Completed</h3>
+            <p class="text-3xl font-bold text-white mt-2"><!-----{{ completed_dares }}------>0</p>
+        </div>
+        <div class="bg-[#1c1c1c] shadow-lg rounded-xl p-5 text-center border border-yellow-500">
+            <h3 class="text-lg font-semibold text-yellow-300">Pending</h3>
+            <p class="text-3xl font-bold text-white mt-2"><!----{{ pending_dares }}---->0</p>
+        </div>
+        <div class="bg-[#1c1c1c] shadow-lg rounded-xl p-5 text-center border border-blue-500">
+            <h3 class="text-lg font-semibold text-blue-400">Leaderboard Rank</h3>
+            <p class="text-3xl font-bold text-white mt-2">#{{ leaderboard_rank }}</p>
+        </div>
+    </div>
+
+    <!-- Recent Dares -->
+    <div class="bg-[#1a1a1a] shadow-xl rounded-xl p-6 border border-red-500">
+        <h3 class="text-2xl font-bold mb-4 title-orbitron text-center"
+            style="text-shadow: 0 0 10px #ff5500, 0 0 20px #ff2200;">
+            🧨 Recent Dares 🧨
+        </h3>
+        {% if recent_dares %}
+        <div class="overflow-x-auto mt-4">
+            <table class="min-w-full text-left text-sm border border-gray-700 rounded-md">
+                <thead class="bg-[#2a2a2a] text-red-400">
+                    <tr>
+                        <th class="px-4 py-2">Title</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Deadline</th>
+                        <!-- <th class="px-4 py-2">Image</th> -->
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 text-white">
+                    {% for dare in recent_dares %}
+                    <tr>
+                        <td class="px-4 py-2">{{ dare.name }}</td>
+                        <td class="px-4 py-2">
+                            {% if dare.dare_image %}
+                                <span class="inline-block bg-green-600 text-white text-xs px-2 py-1 rounded-full">Completed</span>
+                            {% else %}
+                                {% if dare.deadline %}
+                                    {% now "Y-m-d" as today %}
+                                    {% if dare.deadline|date:"Y-m-d" < today %}
+                                        <span class="inline-block bg-red-600 text-white text-xs px-2 py-1 rounded-full">Overdue</span>
+                                    {% else %}
+                                        <span class="inline-block bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Pending</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="inline-block bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Pending</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 text-gray-300">
+                            {% if dare.deadline %}
+                                {{ dare.deadline|date:"M d, Y" }}
+                            {% else %}
+                                No deadline
+                            {% endif %}
+                        </td>
+                        <!-- <td class="px-4 py-2">
+                            {% if dare.dare_image %}
+                                <img src="{{ dare.dare_image.url }}" alt="Dare image" class="w-8 h-8 rounded object-cover">
+                            {% else %}
+                                <span class="text-gray-500 text-xs">No image</span>
+                            {% endif %}
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-gray-400">No recent dares found.</p>
+        {% endif %}
+    </div>
+
+    <!-- Additional Actions -->
+    <div class="mt-6 text-center">
+        <a href="{% url 'create_dare' %}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg mr-4 transition duration-300">
+            Add New Dare
+        </a>
+        <a href="{% url 'dares' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+            View All Dares
+        </a>
+    </div>
+</main>
+
+<!-- <footer class="bg-[#111] py-4 text-center text-gray-400 text-sm mt-10 border-t border-red-800">
+    © 2025 Dare Exchange. All rights reserved.
+</footer> -->
+{% endblock %}

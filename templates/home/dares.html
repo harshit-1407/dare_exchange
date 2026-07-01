@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Dares | Dare Exchange</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Orbitron:wght@600&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at 20% 30%, #452c0d, #1c1a1a, #090404);
+      background-size: 300% 300%;
+      animation: backgroundMove 10s ease infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes backgroundMove {
+      0% {
+        background-position: 0% 0%;
+      }
+
+      50% {
+        background-position: 100% 100%;
+      }
+
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ffeb3b;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: floatSpark 4s linear infinite;
+    }
+
+    @keyframes floatSpark {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-800px) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    .spark:nth-child(odd) {
+      background: #ffa726;
+    }
+
+    .spark:nth-child(even) {
+      background: #fff176;
+    }
+
+    h2.title-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .dare-name {
+      font-family: 'Orbitron', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen p-4 relative">
+
+  <!-- Spark generator -->
+  <div class="max-w-7xl mx-auto relative z-10">
+    <!-- <h2 class="text-3xl title-orbitron text-orange-400 text-center drop-shadow-lg">Submitted Dares🔥</h2> -->
+    <h2 class="text-4xl font-bold text-white text-center mb-1 title-orbitron" style="
+  text-shadow: 0 0 10px #ff5500, 0 0 20px #ff2200, 0 0 30px #ff2200;">
+      🔥 Submitted Dares 🔥
+    </h2>
+    <p class="text-center text-gray-200 text-sm">See what wild dares your friends are up to</p>
+
+
+    <div id="daresContainer" class="p-6 max-w-5xl mx-auto grid gap-6">
+
+      {% for dare in dares %}
+      <div
+        class="bg-gradient-to-br from-[#1a1a1a]/70 via-[#2b2b2b]/60 to-black/50 rounded-lg shadow hover:shadow-xl transition p-6 flex flex-row justify-between items-start gap-4 backdrop-blur-sm border border-orange-500">
+
+        <!-- Left section -->
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl dare-name font-bold mb-2" style="
+  color: white;
+  text-shadow: 0 0 10px #ff5500, 0 0 20px #ff2200, 0 0 30px #ff2200;">
+              <!-- {{ dare.id }}. {{ dare.name }} -->
+                🔥 {{dare.name}}
+              <small class="text-sm-md" style="color: black;">
+                {% if dare.is_edited %}
+                (edited)
+                {% endif %}
+              </small>
+            </h3>
+
+            <p class="text-gray-300 mb-1"><strong>Email:</strong> {{ dare.email }}</p>
+            <p class="text-gray-300 mb-1"><strong>Phone:</strong> {{ dare.phone_number }}</p>
+            <p class="text-gray-200 mt-2"><strong>Dare:</strong> {{ dare.dare }}</p>
+            <br>
+            <a href="{% url 'delete_dare' dare.id %}"
+              class="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-2 rounded">GAYAB CHHUU🪄!</a>
+            &nbsp;
+            <a href="{% url 'edit_dare' dare.id %}"
+              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded">CHAMATKAAR✏️</a>
+          </div>
+        </div>
+
+        <!-- Right section -->
+        <div class="flex flex-col items-center">
+          <span class="text-sm text-gray-300 mb-2">Deadline: {{ dare.deadline }}</span>
+          <!-- <div class="w-32 h-32 flex-shrink-0">
+            <img src="{{ dare.dare_images.url }}" alt="Dare Image"
+              class="w-full h-full object-cover rounded-lg shadow-md">
+          </div> -->
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      for (let i = 0; i < 40; i++) {
+        const spark = document.createElement("div");
+        spark.className = "spark";
+        spark.style.left = `${Math.random() * 100}%`;
+        spark.style.bottom = `${Math.random() * 50}px`;
+        spark.style.animationDuration = `${3 + Math.random() * 3}s`;
+        document.body.appendChild(spark);
+      }
+    });
+  </script>
+
+</body>
+
+</html>
